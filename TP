@@ -1,0 +1,56 @@
+package de.JeterLP.ZombieCommands.Commands;
+
+import de.JeterLP.ZombieCommands.main;
+import java.util.ArrayList;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+
+public class TP implements CommandExecutor{
+    public static ArrayList TPZU = new ArrayList();
+    public static ArrayList TPPLAYER = new ArrayList();
+    
+    private main main;
+    public TP (main t){
+    main = t;
+                        }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String commandlabel,String[] args){
+        if(cmd.getName().equalsIgnoreCase("tp")){
+        Player p = (Player)sender;
+        if(p.hasPermission("zombieCommands.teleport.direct")){
+        Player target = main.getServer().getPlayer(args[0]);
+
+          Location location = target.getLocation();
+
+          int posX = location.getBlockX();
+          int posY = location.getBlockY();
+          int posZ = location.getBlockZ();
+
+          Location newLocation = new Location(target.getWorld(), posX, posY, posZ);
+          p.teleport(newLocation);
+
+          p.sendMessage(ChatColor.GREEN + "you are now at " + ChatColor.GOLD + target.getDisplayName() + ChatColor.GREEN + "'s Location!");
+
+          return true;       
+        }else if(p.hasPermission("zombieCommands.teleport.request")){
+        Player target = main.getServer().getPlayer(args[0]);
+        p.sendMessage(ChatColor.GREEN + "You had sent a teleport request to:" + ChatColor.GOLD + target.getDisplayName());    
+        TP.TPZU.add(target);
+        
+        
+        return true;
+        }
+                                                                                              
+        }
+        
+        return false;
+        
+    }
+    
+}
