@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class TP implements CommandExecutor{
     public static ArrayList TPZU = new ArrayList();
-    public static ArrayList TPPLAYER = new ArrayList();
+   
     
     private main main;
     public TP (main t){
@@ -41,12 +41,25 @@ public class TP implements CommandExecutor{
         }else if(p.hasPermission("zombieCommands.teleport.request")){
         Player target = main.getServer().getPlayer(args[0]);
         p.sendMessage(ChatColor.GREEN + "You had sent a teleport request to:" + ChatColor.GOLD + target.getDisplayName());    
-        TP.TPZU.add(target);
-        
-        
+        TP.TPZU.add(target);                        
+        if(args[1].equalsIgnoreCase("yes")){
+        if(TP.TPZU.contains(target)){
+                
+          Location location = target.getLocation();
+
+          int posX = location.getBlockX();
+          int posY = location.getBlockY();
+          int posZ = location.getBlockZ();
+
+        Location newLocation = new Location(target.getWorld(), posX, posY, posZ);
+        p.teleport(newLocation);
+        TP.TPZU.remove(target);
         return true;
         }
-                                                                                              
+        }
+        
+            
+        }                                                                                      
         }
         
         return false;
@@ -54,3 +67,4 @@ public class TP implements CommandExecutor{
     }
     
 }
+
